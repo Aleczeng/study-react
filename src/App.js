@@ -8,25 +8,26 @@ import FormControl from "react-bootstrap/es/FormControl";
 
 class App extends Component {
 
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
         this.state = {
-            toDoItem: '',
             items: ['Study English', 'Study React']
         };
     }
 
     render() {
         return (
-
-
             <Fragment>
                 <Container>
                     <h1>To do list</h1>
-
                     <InputGroup className="mb-3">
-                        <FormControl value={this.state.toDoItem} onChange={this.handleInputValue.bind(this)}/>
-                        <button className="btn btn-primary" onClick={this.addItem.bind(this, this.state.toDoItem)}>
+                        <FormControl as="input" ref={(input) => {
+                            this.item = input
+                        }}/>
+                        <button className="btn btn-primary"
+                                onClick={() => {
+                                    this.addItem(this.item)
+                                }}>
                             Add item
                         </button>
                     </InputGroup>
@@ -34,7 +35,9 @@ class App extends Component {
                         {this.state.items.map((item, index) =>
                             <ListGroup.Item key={index}>{item}
                                 <button className="btn btn-danger float-right"
-                                        onClick={this.onDeleteItem.bind(this, index)}>Delete
+                                        onClick={() => {
+                                            this.onDeleteItem()
+                                        }}>Delete
                                 </button>
                             </ListGroup.Item>
                         )}
@@ -44,18 +47,18 @@ class App extends Component {
         );
     }
 
-    addItem() {
-        this.setState({toDoItem: '', items: [...this.state.items, this.state.toDoItem]});
+    addItem(myInputValue) {
+        const items = [...this.state.items];
+        items.push(myInputValue.value);
+        this.setState({items});
+        myInputValue.value = '';
     }
 
-    handleInputValue(event) {
-        this.setState({toDoItem: event.target.value})
-    }
 
     onDeleteItem(index) {
         const items = [...this.state.items];
         items.splice(index, 1);
-        this.setState({items: items})
+        this.setState({items})
     }
 }
 
