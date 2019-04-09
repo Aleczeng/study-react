@@ -1,11 +1,10 @@
 import React, {Component, Fragment} from 'react';
-import './App.css';
 import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
 import ToDoItem from "./ToDoItem";
-
+import './App.css';
 
 class App extends Component {
 
@@ -34,29 +33,38 @@ class App extends Component {
                         </button>
                     </InputGroup>
                     <ListGroup>
-                        {this.state.items.map((item, index) =>
-                            <ToDoItem key={index} item={item} onDeleteItem={() => {
-                                this.onDeleteItem(index)
-                            }}/>
-                        )}
+                        {this.getItems()}
                     </ListGroup>
                 </Container>
             </Fragment>
         );
     }
 
-    addItem(myInputValue) {
-        const items = [...this.state.items];
-        items.push(myInputValue.value);
-        this.setState({items});
-        myInputValue.value = '';
+    getItems() {
+        return (
+            this.state.items.map((item, index) =>
+                <ToDoItem key={index} item={item} onDeleteItem={() => {
+                    this.onDeleteItem(index)
+                }}/>
+            )
+        )
     }
 
+    addItem(myInputValue) {
+        this.setState((prevState) => {
+            const items = [...prevState.items];
+            items.push(myInputValue.value);
+            myInputValue.value = '';
+            return {items};
+        });
+    }
 
     onDeleteItem(index) {
-        const items = [...this.state.items];
-        items.splice(index, 1);
-        this.setState({items})
+        this.setState((prevState) => {
+            const items = [...prevState.items];
+            items.splice(index, 1);
+            return {items};
+        })
     }
 }
 
