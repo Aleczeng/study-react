@@ -4,6 +4,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
+import ToDoItem from "./ToDoItem";
 
 
 class App extends Component {
@@ -21,7 +22,8 @@ class App extends Component {
                 <Container>
                     <h1>To do list</h1>
                     <InputGroup className="mb-3">
-                        <FormControl as="input" ref={(input) => {
+                        <label htmlFor="item">Enter item</label>
+                        <FormControl id="item" as="input" ref={(input) => {
                             this.item = input
                         }}/>
                         <button className="btn btn-primary"
@@ -33,13 +35,9 @@ class App extends Component {
                     </InputGroup>
                     <ListGroup>
                         {this.state.items.map((item, index) =>
-                            <ListGroup.Item key={index}>{item}
-                                <button className="btn btn-danger float-right"
-                                        onClick={() => {
-                                            this.onDeleteItem()
-                                        }}>Delete
-                                </button>
-                            </ListGroup.Item>
+                            <ToDoItem key={index} item={item} onDeleteItem={() => {
+                                this.onDeleteItem(index)
+                            }}/>
                         )}
                     </ListGroup>
                 </Container>
