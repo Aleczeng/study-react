@@ -12,3 +12,17 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.my-header:hover {
+    color: darkred;
+}
+
+.show {
+    opacity: 1;
+    transition: all 1s ease-in;
+}
+
+.hide {
+    opacity: 0;
+    transition: all 1s ease-in;
+}

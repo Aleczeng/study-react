@@ -5,13 +5,15 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
 import ToDoItem from "./ToDoItem";
 import './App.css';
+import axios from "axios";
 
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            items: ['Study English', 'Study React']
+            items: [],
+            show: true
         };
     }
 
@@ -19,7 +21,7 @@ class App extends Component {
         return (
             <Fragment>
                 <Container>
-                    <h1>To do list</h1>
+                    <h1 className="my-header">To do list</h1>
                     <InputGroup className="mb-3">
                         <label htmlFor="item">Enter item</label>
                         <FormControl id="item" as="input" ref={(input) => {
@@ -35,9 +37,26 @@ class App extends Component {
                     <ListGroup>
                         {this.getItems()}
                     </ListGroup>
+
+                    <p className={this.state.show ? 'show' : 'hide'}>Animate</p>
+                    <button className="btn btn-warning" onClick={() => {
+                        this.handleToggle()
+                    }}>Toggle
+                    </button>
                 </Container>
             </Fragment>
         );
+    }
+
+    componentDidMount() {
+        axios.get('http://localhost.charlesproxy.com:8080/api/to-do-list',
+            {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+            .then(resp => {
+                console.log(resp);
+                const items = resp.data;
+                this.setState({items})
+            })
+            .catch(error => console.log(error));
     }
 
     getItems() {
@@ -65,6 +84,13 @@ class App extends Component {
             items.splice(index, 1);
             return {items};
         })
+    }
+
+    handleToggle() {
+        let show = this.state.show;
+        show = !show;
+        this.setState({show});
+
     }
 }
 
