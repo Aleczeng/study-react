@@ -1,1 +1,29 @@
+.myReduxItem {
+    margin-top: 40px;
+}
+.my-header:hover {
+    color: paleturquoise;
+}
 
+.show {
+    opacity: 1;
+    transition: all 1s ease-in;
+}
+
+.hide {
+    animation: hide-item 2s ease-in forwards;
+}
+@keyframes hide-item {
+    0%{
+        opacity: 1;
+        color: aqua;
+    }
+    50%{
+        opacity: 0.5;
+        color: rebeccapurple;
+    }
+    100%{
+        opacity: 0;
+        color: greenyellow;
+    }
+}

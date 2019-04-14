@@ -6,15 +6,16 @@ import FormControl from "react-bootstrap/es/FormControl";
 import ToDoItem from "./ToDoItem";
 import './App.css';
 import axios from "axios";
+import store from "./store/store";
 
 class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            items: [],
-            show: true
-        };
+        this.state = store.getState();
+        store.subscribe(() => {
+            this.setState(store.getState());
+        });
     }
 
     render() {
@@ -37,12 +38,24 @@ class App extends Component {
                     <ListGroup>
                         {this.getItems()}
                     </ListGroup>
-
-                    <p className={this.state.show ? 'show' : 'hide'}>Animate</p>
+                    <p className={this.state.show ? 'show' : 'hide'}>This is an Animate</p>
                     <button className="btn btn-warning" onClick={() => {
                         this.handleToggle()
                     }}>Toggle
                     </button>
+                </Container>
+
+                <Container className="myReduxItem">
+                    <h1 className="my-header">Redux study</h1>
+                    <InputGroup className="mb-3">
+                        <FormControl id="item" as="input" value={this.state.inputValue} onChange={this.handleInput}/>
+                        <button className="btn btn-primary" onClick={this.addReduxItem}>Submit</button>
+                    </InputGroup>
+                    <ListGroup>
+                        {this.state.reduxItems.map((reduxItem, index) => {
+                            return <ListGroup.Item key={index}>{reduxItem}</ListGroup.Item>;
+                        })}
+                    </ListGroup>
                 </Container>
             </Fragment>
         );
@@ -57,9 +70,9 @@ class App extends Component {
                 this.setState({items})
             })
             .catch(error => console.log(error));
-    }
+    };
 
-    getItems() {
+    getItems = () => {
         return (
             this.state.items.map((item, index) =>
                 <ToDoItem key={index} item={item} onDeleteItem={() => {
@@ -67,7 +80,7 @@ class App extends Component {
                 }}/>
             )
         )
-    }
+    };
 
     addItem(myInputValue) {
         this.setState((prevState) => {
@@ -76,21 +89,36 @@ class App extends Component {
             myInputValue.value = '';
             return {items};
         });
-    }
+    };
 
-    onDeleteItem(index) {
+    onDeleteItem = (index) => {
         this.setState((prevState) => {
             const items = [...prevState.items];
             items.splice(index, 1);
             return {items};
         })
-    }
+    };
 
-    handleToggle() {
+    handleToggle = () => {
         let show = this.state.show;
         show = !show;
         this.setState({show});
+    };
 
+    handleInput = event => {
+        const action = {
+            type: 'change_input_value',
+            value: event.target.value
+        };
+        store.dispatch(action);
+    };
+
+    addReduxItem = () => {
+        const action = {
+            type: 'add_redux_item',
+            value: this.state.inputValue
+        };
+        store.dispatch(action);
     }
 }
 
