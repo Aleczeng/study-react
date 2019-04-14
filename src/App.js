@@ -7,6 +7,7 @@ import ToDoItem from "./ToDoItem";
 import './App.css';
 import axios from "axios";
 import store from "./store/store";
+import {ADD_REDUX_VALUE, CHANGE_INPUT_VALUE, DELETE_REDUX_VALUE} from "./store/action";
 
 class App extends Component {
 
@@ -52,9 +53,7 @@ class App extends Component {
                         <button className="btn btn-primary" onClick={this.addReduxItem}>Submit</button>
                     </InputGroup>
                     <ListGroup>
-                        {this.state.reduxItems.map((reduxItem, index) => {
-                            return <ListGroup.Item key={index}>{reduxItem}</ListGroup.Item>;
-                        })}
+                        {this.getReduxItems()}
                     </ListGroup>
                 </Container>
             </Fragment>
@@ -105,9 +104,19 @@ class App extends Component {
         this.setState({show});
     };
 
+    getReduxItems = () => {
+        return (
+            this.state.reduxItems.map((reduxItem, index) =>
+                <ToDoItem key={index} item={reduxItem} onDeleteItem={() => {
+                    this.onDeleteReduxItem(index)
+                }}/>
+            )
+        )
+    };
+
     handleInput = event => {
         const action = {
-            type: 'change_input_value',
+            type: CHANGE_INPUT_VALUE,
             value: event.target.value
         };
         store.dispatch(action);
@@ -115,8 +124,16 @@ class App extends Component {
 
     addReduxItem = () => {
         const action = {
-            type: 'add_redux_item',
+            type: ADD_REDUX_VALUE,
             value: this.state.inputValue
+        };
+        store.dispatch(action);
+    };
+
+    onDeleteReduxItem = (index) => {
+        const action = {
+            type: DELETE_REDUX_VALUE,
+            value: index
         };
         store.dispatch(action);
     }

@@ -1,3 +1,5 @@
+import {ADD_REDUX_VALUE, CHANGE_INPUT_VALUE, DELETE_REDUX_VALUE} from "./action";
+
 const defaultState = {
     items: [],
     show: true,
@@ -8,13 +10,17 @@ const defaultState = {
 export default (state = defaultState, action) => {
     let newState = state;
     switch (action.type) {
-        case 'change_input_value': {
+        case CHANGE_INPUT_VALUE: {
             newState.inputValue = action.value;
             return newState;
         }
-        case 'add_redux_item': {
+        case ADD_REDUX_VALUE: {
             newState.reduxItems.splice(0, 0, action.value);
             newState.inputValue = '';
+            return newState;
+        }
+        case DELETE_REDUX_VALUE: {
+            newState.reduxItems.splice(action.value, 1);
             return newState;
         }
         default:
