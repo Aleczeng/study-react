@@ -1,13 +1,9 @@
-import React, {Component, Fragment} from 'react';
-import ListGroup from "react-bootstrap/ListGroup";
-import Container from "react-bootstrap/Container";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/es/FormControl";
+import React, {Component} from 'react';
 import ToDoItem from "./ToDoItem";
-import './App.css';
 import axios from "axios";
 import store from "./store/store";
-import {ADD_REDUX_VALUE, CHANGE_INPUT_VALUE, DELETE_REDUX_VALUE} from "./store/action";
+import {addReduxValue, changeInputValue, deleteReduxValue} from "./store/actionCreators";
+import AppUI from "./AppUI";
 
 class App extends Component {
 
@@ -21,42 +17,16 @@ class App extends Component {
 
     render() {
         return (
-            <Fragment>
-                <Container>
-                    <h1 className="my-header">To do list</h1>
-                    <InputGroup className="mb-3">
-                        <label htmlFor="item">Enter item</label>
-                        <FormControl id="item" as="input" ref={(input) => {
-                            this.item = input
-                        }}/>
-                        <button className="btn btn-primary"
-                                onClick={() => {
-                                    this.addItem(this.item)
-                                }}>
-                            Add item
-                        </button>
-                    </InputGroup>
-                    <ListGroup>
-                        {this.getItems()}
-                    </ListGroup>
-                    <p className={this.state.show ? 'show' : 'hide'}>This is an Animate</p>
-                    <button className="btn btn-warning" onClick={() => {
-                        this.handleToggle()
-                    }}>Toggle
-                    </button>
-                </Container>
-
-                <Container className="myReduxItem">
-                    <h1 className="my-header">Redux study</h1>
-                    <InputGroup className="mb-3">
-                        <FormControl id="item" as="input" value={this.state.inputValue} onChange={this.handleInput}/>
-                        <button className="btn btn-primary" onClick={this.addReduxItem}>Submit</button>
-                    </InputGroup>
-                    <ListGroup>
-                        {this.getReduxItems()}
-                    </ListGroup>
-                </Container>
-            </Fragment>
+            <AppUI
+                inputValue={this.state.inputValue}
+                show={this.state.show}
+                addItem={this.addItem}
+                getItems={this.getItems}
+                handleToggle={this.handleToggle}
+                handleInput={this.handleInput}
+                addReduxItem={this.addReduxItem}
+                getReduxItems={this.getReduxItems}
+            />
         );
     }
 
@@ -81,7 +51,7 @@ class App extends Component {
         )
     };
 
-    addItem(myInputValue) {
+    addItem = myInputValue => {
         this.setState((prevState) => {
             const items = [...prevState.items];
             items.push(myInputValue.value);
@@ -90,7 +60,7 @@ class App extends Component {
         });
     };
 
-    onDeleteItem = (index) => {
+    onDeleteItem = index => {
         this.setState((prevState) => {
             const items = [...prevState.items];
             items.splice(index, 1);
@@ -115,26 +85,17 @@ class App extends Component {
     };
 
     handleInput = event => {
-        const action = {
-            type: CHANGE_INPUT_VALUE,
-            value: event.target.value
-        };
+        const action = changeInputValue(event.target.value);
         store.dispatch(action);
     };
 
     addReduxItem = () => {
-        const action = {
-            type: ADD_REDUX_VALUE,
-            value: this.state.inputValue
-        };
+        const action = addReduxValue(this.state.inputValue);
         store.dispatch(action);
     };
 
-    onDeleteReduxItem = (index) => {
-        const action = {
-            type: DELETE_REDUX_VALUE,
-            value: index
-        };
+    onDeleteReduxItem = index => {
+        const action = deleteReduxValue(index);
         store.dispatch(action);
     }
 }

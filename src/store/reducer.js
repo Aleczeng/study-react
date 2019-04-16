@@ -1,4 +1,4 @@
-import {ADD_REDUX_VALUE, CHANGE_INPUT_VALUE, DELETE_REDUX_VALUE} from "./action";
+import {ADD_REDUX_VALUE, CHANGE_INPUT_VALUE, DELETE_REDUX_VALUE} from "./actionTypes";
 
 const defaultState = {
     items: [],
