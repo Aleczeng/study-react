@@ -20,10 +20,12 @@ class App extends Component {
             <AppUI
                 inputValue={this.state.inputValue}
                 show={this.state.show}
+                inputReduxValue={this.state.inputReduxValue}
+                handleInput={this.handleInput}
                 addItem={this.addItem}
                 getItems={this.getItems}
                 handleToggle={this.handleToggle}
-                handleInput={this.handleInput}
+                handleReduxInput={this.handleReduxInput}
                 addReduxItem={this.addReduxItem}
                 getReduxItems={this.getReduxItems}
             />
@@ -51,12 +53,18 @@ class App extends Component {
         )
     };
 
-    addItem = myInputValue => {
+    handleInput = event => {
+        const inputValue = event.target.value;
+        console.log(inputValue);
+        this.setState({inputValue});
+    };
+
+    addItem = () => {
         this.setState((prevState) => {
             const items = [...prevState.items];
-            items.push(myInputValue.value);
-            myInputValue.value = '';
-            return {items};
+            items.push(this.state.inputValue);
+            const inputValue = '';
+            return {items, inputValue};
         });
     };
 
@@ -84,13 +92,13 @@ class App extends Component {
         )
     };
 
-    handleInput = event => {
+    handleReduxInput = event => {
         const action = changeInputValue(event.target.value);
         store.dispatch(action);
     };
 
     addReduxItem = () => {
-        const action = addReduxValue(this.state.inputValue);
+        const action = addReduxValue(this.state.inputReduxValue);
         store.dispatch(action);
     };
 

@@ -4,6 +4,7 @@ const defaultState = {
     items: [],
     show: true,
     inputValue: 'input value',
+    inputReduxValue: 'input value',
     reduxItems: [1, 2, 3]
 };
 
@@ -11,12 +12,12 @@ export default (state = defaultState, action) => {
     let newState = state;
     switch (action.type) {
         case CHANGE_INPUT_VALUE: {
-            newState.inputValue = action.value;
+            newState.inputReduxValue = action.value;
             return newState;
         }
         case ADD_REDUX_VALUE: {
             newState.reduxItems.splice(0, 0, action.value);
-            newState.inputValue = '';
+            newState.inputReduxValue = '';
             return newState;
         }
         case DELETE_REDUX_VALUE: {
