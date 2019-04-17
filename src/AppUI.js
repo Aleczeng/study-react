@@ -21,7 +21,8 @@ const AppUI = (props) => {
                 <p className={props.show ? 'show' : 'hide'}>This is an Animate</p>
                 <button className="btn btn-warning" onClick={() => {
                     props.handleToggle()
-                }}>Toggle
+                }}>
+                    Toggle
                 </button>
             </Container>
 

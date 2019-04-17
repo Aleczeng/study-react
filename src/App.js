@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import ToDoItem from "./ToDoItem";
 import axios from "axios";
 import store from "./store/store";
-import {addReduxValue, changeInputValue, deleteReduxValue, initReduxItem} from "./store/actionCreators";
+import {addReduxValue, changeInputValue, deleteReduxValue, getReduxItems} from "./store/actionCreators";
 import AppUI from "./AppUI";
 
 class App extends Component {
-
     constructor(props) {
         super(props);
         this.state = store.getState();
@@ -39,12 +38,10 @@ class App extends Component {
                 console.log(resp);
                 const items = resp.data;
                 this.setState({items});
-
-                const action = initReduxItem(items);
-                store.dispatch(action);
             })
             .catch(error => console.log(error));
-
+        const action = getReduxItems();
+        store.dispatch(action);
     };
 
     getItems = () => {
@@ -102,8 +99,10 @@ class App extends Component {
     };
 
     addReduxItem = () => {
-        const action = addReduxValue(this.state.inputReduxValue);
-        store.dispatch(action);
+        if (this.state.inputReduxValue) {
+            const action = addReduxValue(this.state.inputReduxValue);
+            store.dispatch(action);
+        }
     };
 
     onDeleteReduxItem = index => {
