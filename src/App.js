@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ToDoItem from "./ToDoItem";
 import axios from "axios";
 import store from "./store/store";
-import {addReduxValue, changeInputValue, deleteReduxValue} from "./store/actionCreators";
+import {addReduxValue, changeInputValue, deleteReduxValue, initReduxItem} from "./store/actionCreators";
 import AppUI from "./AppUI";
 
 class App extends Component {
@@ -38,9 +38,13 @@ class App extends Component {
             .then(resp => {
                 console.log(resp);
                 const items = resp.data;
-                this.setState({items})
+                this.setState({items});
+
+                const action = initReduxItem(items);
+                store.dispatch(action);
             })
             .catch(error => console.log(error));
+
     };
 
     getItems = () => {
